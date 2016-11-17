@@ -10,7 +10,7 @@ package engine
 	import starling.display.DisplayObject;
 	import starling.display.Image;
 	import starling.display.MovieClip;
-	import starling.display.Shape;
+	//import starling.display.Shape;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;

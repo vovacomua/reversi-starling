@@ -11,7 +11,7 @@ package engine
 	import starling.display.Button;
 	import starling.display.DisplayObject;
 	import starling.display.Image;
-	import starling.display.Shape;
+	//import starling.display.Shape;
 	import starling.display.Sprite;
 	import starling.display.MovieClip;
 	import starling.events.Event;
@@ -39,7 +39,7 @@ package engine
 		public var buttonBlack:CustomButton;
 		public var scores:CustomButton;
 		
-		private var tiles			:Shape;
+		//private var tiles			:Shape;
 		private var tiles2:Sprite;
 		//private var tile:Tile;
 		
@@ -66,15 +66,14 @@ package engine
 			board.filter = filterShadow;
 			this.addChild(board);
 			
-			tiles = new Shape();
+			/*tiles = new Shape();
 			tiles.x = tiles.y = boardOffset;
 			tiles.touchable = false;
 			tiles.filter = filterShadow;
-			this.addChild(tiles);
+			this.addChild(tiles);*/
 			
 			tiles2 = new Sprite();
 			tiles2.x = tiles2.y = boardOffset;
-			tiles.touchable = false;
 			//tiles.filter = filterShadow;
 			this.addChild(tiles2);
 			addTiles();
@@ -122,7 +121,8 @@ package engine
 			switch(view){
 				case ScreenState.GAME_SHOW_BUTTONS:
 					board.visible = false;
-					tiles.visible = false; tiles2.visible = false;
+					//tiles.visible = false; 
+					tiles2.visible = false;
 					buttonWhite.visible = true;
 					buttonBlack.visible = true;
 					scores.visible = false;
@@ -130,7 +130,8 @@ package engine
 				
 				case ScreenState.GAME_INIT_GAME:
 					board.visible = true;					
-					tiles.visible = false; tiles2.visible = true;
+					//tiles.visible = false; 
+					tiles2.visible = true;
 					buttonWhite.visible = false;
 					buttonBlack.visible = false;
 					scores.visible = true;
@@ -142,7 +143,7 @@ package engine
 		
 		public function drawTiles (map:Array):void
 		{
-			tiles.graphics.clear();
+			//tiles.graphics.clear();
 			
 			for (var i:uint = 0; i <= 7; ++i)
 			{
@@ -174,9 +175,9 @@ package engine
 		
 		private function drawStone(color:uint, i:uint, j:uint, size:uint):void
 		{
-			tiles.graphics.beginFill(color, .9);
+			/*tiles.graphics.beginFill(color, .9);
 			tiles.graphics.drawCircle(stoneSize*i + stoneSize/2, stoneSize*j + stoneSize/2, size);
-			tiles.graphics.endFill();
+			tiles.graphics.endFill();*/
 		}
 	}
 }
