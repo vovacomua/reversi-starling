@@ -103,10 +103,11 @@ package engine
 			
 			for (var i:int = 0; i<currentFrameSprite.numChildren; i++)
 			{
-				trace(frameNum, 'w:', MovieClip(currentFrameSprite.getChildAt(i)).width, ' , x:', MovieClip(currentFrameSprite.getChildAt(i)).x);
-				MovieClip(currentFrameSprite.getChildAt(i)).currentFrame = 0;
-				MovieClip(currentFrameSprite.getChildAt(i)).play();
-				MovieClip(currentFrameSprite.getChildAt(i)).x = MovieClip(currentFrameSprite.getChildAt(i)).y = (m_tileSize - MovieClip(currentFrameSprite.getChildAt(i)).width)/2;
+				//trace(frameNum, 'w:', MovieClip(currentFrameSprite.getChildAt(i)).width, ' , x:', MovieClip(currentFrameSprite.getChildAt(i)).x);
+				var mc:MovieClip = MovieClip(currentFrameSprite.getChildAt(i));
+				mc.currentFrame = 0;
+				mc.play();
+				mc.x = mc.y = (m_tileSize - mc.width)/2;
 			}
 		}
 		
