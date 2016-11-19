@@ -82,7 +82,9 @@ package engine
 			
 			var frame:Sprite = m_frames[frameNum - 1];
 			
-			if (frame) frame.addChild(mc);
+			if (frame) var disObj:DisplayObject = frame.addChild(mc);
+			
+			disObj.x = disObj.y = (m_tileSize - disObj.width)/2;
 		}
 		
 		public function gotoAndPlay(_val:*):void
@@ -107,7 +109,6 @@ package engine
 				var mc:MovieClip = MovieClip(currentFrameSprite.getChildAt(i));
 				mc.currentFrame = 0;
 				mc.play();
-				mc.x = mc.y = (m_tileSize - mc.width)/2;
 			}
 		}
 		
