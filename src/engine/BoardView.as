@@ -11,9 +11,8 @@ package engine
 	import starling.display.Button;
 	import starling.display.DisplayObject;
 	import starling.display.Image;
-	//import starling.display.Shape;
-	import starling.display.Sprite;
 	import starling.display.MovieClip;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -40,7 +39,7 @@ package engine
 		public var scores:CustomButton;
 		
 		//private var tiles			:Shape;
-		private var tiles2:Sprite;
+		private var tiles2:Tiles;
 		//private var tile:Tile;
 		
 		private var pieces:uint = 8;
@@ -72,7 +71,7 @@ package engine
 			tiles.filter = filterShadow;
 			this.addChild(tiles);*/
 			
-			tiles2 = new Sprite();
+			tiles2 = new Tiles();
 			tiles2.x = tiles2.y = boardOffset;
 			//tiles.filter = filterShadow;
 			this.addChild(tiles2);
@@ -152,22 +151,20 @@ package engine
 					switch(map[i][j]){
 						case "X":
 							//drawStone(0x000000, i, j, stoneSize/2 - 4);
-							Tile(tiles2.getChildByName('t_'+ i.toString() + '_' + j.toString())).setBW("B");
+							tiles2.getTile(i, j).setBW("B");
 							break;
 						
 						case "O":
-							//drawStone(0xFFFFFF, i, j, stoneSize/2 - 4);
-							Tile(tiles2.getChildByName('t_'+ i.toString() + '_' + j.toString())).setBW("W");
+							tiles2.getTile(i, j).setBW("W");
 							break;
 						
 						case "h":
-							//drawStone(0x00FF00, i, j, stoneSize/10);
-							Tile(tiles2.getChildByName('t_'+ i.toString() + '_' + j.toString())).setHint();
+							tiles2.getTile(i, j).setHint();
 							break;
+						
 						case " ":
-							
-							Tile(tiles2.getChildByName('t_'+ i.toString() + '_' + j.toString())).setEmpty();
-							break;
+							tiles2.getTile(i, j).setEmpty();
+							break;						
 					}
 				}
 			}
