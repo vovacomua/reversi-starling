@@ -39,7 +39,7 @@ package engine
 		public var scores:CustomButton;
 		
 		//private var tiles			:Shape;
-		private var tiles2:Tiles;
+		private var tiles:Tiles;
 		//private var tile:Tile;
 		
 		private var pieces:uint = 8;
@@ -71,10 +71,10 @@ package engine
 			tiles.filter = filterShadow;
 			this.addChild(tiles);*/
 			
-			tiles2 = new Tiles();
-			tiles2.x = tiles2.y = boardOffset;
+			tiles = new Tiles();
+			tiles.x = tiles.y = boardOffset;
 			//tiles.filter = filterShadow;
-			this.addChild(tiles2);
+			this.addChild(tiles);
 			addTiles();
 			
 			buttonWhite = new CustomButton('WHITE');
@@ -110,7 +110,7 @@ package engine
 					tile.name = 't_'+ i.toString() + '_' + j.toString();
 					tile.touchable = false;
 					tile.filter = filterShadow;
-					tiles2.addChild(tile);
+					tiles.addChild(tile);
 				}
 			}
 		}
@@ -121,7 +121,7 @@ package engine
 				case ScreenState.GAME_SHOW_BUTTONS:
 					board.visible = false;
 					//tiles.visible = false; 
-					tiles2.visible = false;
+					tiles.visible = false;
 					buttonWhite.visible = true;
 					buttonBlack.visible = true;
 					scores.visible = false;
@@ -130,7 +130,7 @@ package engine
 				case ScreenState.GAME_INIT_GAME:
 					board.visible = true;					
 					//tiles.visible = false; 
-					tiles2.visible = true;
+					tiles.visible = true;
 					buttonWhite.visible = false;
 					buttonBlack.visible = false;
 					scores.visible = true;
@@ -141,9 +141,7 @@ package engine
 		}
 		
 		public function drawTiles (map:Array):void
-		{
-			//tiles.graphics.clear();
-			
+		{	
 			for (var i:uint = 0; i <= 7; ++i)
 			{
 				for (var j:uint = 0; j <= 7; ++j)
@@ -151,30 +149,24 @@ package engine
 					switch(map[i][j]){
 						case "X":
 							//drawStone(0x000000, i, j, stoneSize/2 - 4);
-							tiles2.getTile(i, j).setBW("B");
+							//tiles2.getTile(i, j).setBW("B"); //setBlack
+							tiles.getTile(i, j).stateContext.setBlack();
 							break;
 						
 						case "O":
-							tiles2.getTile(i, j).setBW("W");
+							tiles.getTile(i, j).stateContext.setWhite();
 							break;
 						
 						case "h":
-							tiles2.getTile(i, j).setHint();
+							tiles.getTile(i, j).stateContext.setHint();
 							break;
 						
 						case " ":
-							tiles2.getTile(i, j).setEmpty();
+							tiles.getTile(i, j).stateContext.setEmpty();
 							break;						
 					}
 				}
 			}
-		}
-		
-		private function drawStone(color:uint, i:uint, j:uint, size:uint):void
-		{
-			/*tiles.graphics.beginFill(color, .9);
-			tiles.graphics.drawCircle(stoneSize*i + stoneSize/2, stoneSize*j + stoneSize/2, size);
-			tiles.graphics.endFill();*/
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package engine
 {
+	import engine.tileStates.StateContext;
+	
 	import flash.display.Bitmap;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -51,6 +53,8 @@ package engine
 		
 		private var currentTile:String = 'empty';
 		
+		public var stateContext:StateContext;
+		
 		public function Tile()
 		{
 			super();
@@ -82,9 +86,8 @@ package engine
 			pushToFrameSprite("flip2B", 6);
 			pushToFrameSprite("flip2W", 7);
 			
-			//with the gotoAndStop function you can give a frame label or the frame number, both work.
-			player.gotoAndStop(setEmpty);
-			//player.nextFrame();
+			stateContext = new StateContext(player);
+			stateContext.setEmpty();
 		}
 		
 		private function pushToFrameSprite(frameName:String, pos:int):void{
