@@ -2,7 +2,7 @@ package engine
 {
 	public class Map
 	{
-		private var board:Array = new Array();	
+		public var board:Array = new Array();	
 		static public var winner:String = "player";
 		
 		public function Map()
@@ -40,33 +40,33 @@ package engine
 		//check if tile is available to make move
 		public function isAvailableMove(tile:String, x:uint, y:uint):Boolean{
 			if ((isValidMove(board, tile, x, y) as Array).length > 0){
-				trace("available");
+				//trace("available");
 				return true;
 			} else {
-				trace("not availabe");
+				//trace("not available");
 				return false;
 			}
 			
 		}
 		
 		//make move, flip captured stones and check if opponent's next move is available
-		public function makeMove(tile:String, x:uint, y:uint):Boolean{
+		public function makeMove(_board:Array, tile:String, x:uint, y:uint):Boolean{
 			trace("makeMove", tile, x, y);
 			var otherTile:String;
 			
 			//flip all
 			var tilesToFlip:Array = new Array();
-			tilesToFlip = isValidMove(board, tile, x, y);
+			tilesToFlip = isValidMove(_board, tile, x, y);
 			
 			for (var n:uint = 0; n < tilesToFlip.length; n++) { 
 				var tx:String = tilesToFlip[n].x;
 				var ty:String = tilesToFlip[n].y;
 				//trace("t", tx);
-				board[tx][ty] = tile;
+				_board[tx][ty] = tile;
 			}
 			
 			//put stone to clicked tile
-			board[x][y] = tile;
+			_board[x][y] = tile;
 			
 			//check opponents next move
 			if (tile == "X"){otherTile = "O";} else{otherTile = "X";}

@@ -81,7 +81,7 @@ package screens
 		private function userMove(x:uint, y:uint):void
 		{
 			if (map.isAvailableMove(this.playerTile, x, y)){ // is this tile available
-				var nextMoveAvailable:Boolean = map.makeMove(this.playerTile, x, y); //make move and get computer can make next move
+				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
 				boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile));
 				
 				if (nextMoveAvailable){
@@ -108,7 +108,7 @@ package screens
 			
 			if (availableMoves.length > 0){ 
 				var move:uint = Math.floor( Math.random() * (availableMoves.length - 1) ); //primitive bot -  choose random move
-				var nextMoveAvailable:Boolean = map.makeMove(this.otherTile, availableMoves[move].x, availableMoves[move].y);
+				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, availableMoves[move].x, availableMoves[move].y);
 				
 				boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile)); // get baord with hints and redraw view
 				boardView.scores.text = map.getScore(this.playerTile, this.otherTile, true)[0]; //show scores
