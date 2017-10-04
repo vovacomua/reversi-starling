@@ -38,8 +38,8 @@ package engine
 		}
 		
 		//check if tile is available to make move
-		public function isAvailableMove(tile:String, x:uint, y:uint):Boolean{
-			if ((isValidMove(board, tile, x, y) as Array).length > 0){
+		public function isAvailableMove(_board:Array, tile:String, x:uint, y:uint):Boolean{
+			if ((isValidMove(_board, tile, x, y) as Array).length > 0){
 				//trace("available");
 				return true;
 			} else {
@@ -71,7 +71,7 @@ package engine
 			//check opponents next move
 			if (tile == "X"){otherTile = "O";} else{otherTile = "X";}
 			
-			if ((getAllValidMoves(otherTile) as Array).length > 0){
+			if ((getAllValidMoves(_board, otherTile) as Array).length > 0){
 				return true;
 			} else {
 				return false;
@@ -81,13 +81,13 @@ package engine
 		}
 		
 		//get board array with hints
-		public function getBoardWithValidMoves(playerTile:String):Array{
+		public function getBoardWithValidMoves(_board:Array, playerTile:String):Array{
 			var boardHints:Array = new Array();
 			
 			boardHints = copyBoard(board);
 			var allValidMoves:Array = new Array();
 			//available moves
-			allValidMoves = getAllValidMoves(playerTile);
+			allValidMoves = getAllValidMoves(_board, playerTile);
 			
 			for (var n:uint = 0; n < allValidMoves.length; n++) { 
 				var tx:String = allValidMoves[n].x;
@@ -98,14 +98,14 @@ package engine
 		}
 		
 		//get array with all tiles available to make move
-		public function getAllValidMoves(tile:String):Array{
+		public function getAllValidMoves(_board:Array, tile:String):Array{
 			var list:Array = new Array();
 			var turns:uint;
 			for (var i:uint = 0; i <= 7; ++i)
 			{
 				for (var j:uint = 0; j <= 7; ++j)
 				{
-					if (isAvailableMove(tile, i, j)) {
+					if (isAvailableMove(_board, tile, i, j)) {
 						list.push({x: i, y: j});
 					}
 				}

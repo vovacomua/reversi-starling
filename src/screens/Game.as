@@ -55,7 +55,7 @@ package screens
 			map.init(); //new clear board array
 			
 			boardView.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
-			boardView.drawTiles(map.getBoardWithValidMoves(playerTile)); //show tiles
+			boardView.drawTiles(map.getBoardWithValidMoves(map.board, playerTile)); //show tiles
 		}
 		
 		private function onTouch(event:TouchEvent):void
@@ -80,16 +80,16 @@ package screens
 		
 		private function userMove(x:uint, y:uint):void
 		{
-			if (map.isAvailableMove(this.playerTile, x, y)){ // is this tile available
+			if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
-				boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile));
+				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
 				
 				if (nextMoveAvailable){
 					this.botMove();	//computer move
 				} else{ //as computed can't move - can user move again?
-					if ((map.getAllValidMoves(this.playerTile) as Array).length > 0){ 
+					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
 						trace('plr move again');
-						boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile)); 
+						boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
 						boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
 						return;
 					} else{
@@ -104,19 +104,19 @@ package screens
 		//computer move 
 		private function botMove():void{
 			var availableMoves:Array = new Array();	
-			availableMoves = map.getAllValidMoves(this.otherTile);
+			availableMoves = map.getAllValidMoves(map.board, this.otherTile);
 			
 			if (availableMoves.length > 0){ 
 				var move:uint = Math.floor( Math.random() * (availableMoves.length - 1) ); //primitive bot -  choose random move
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, availableMoves[move].x, availableMoves[move].y);
 				
-				boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile)); // get baord with hints and redraw view
+				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); // get baord with hints and redraw view
 				boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0]; //show scores
 				
 				if (nextMoveAvailable){
 					//trace('you move');	
 				} else{ //as user can't move - can computer move again?
-					if ((map.getAllValidMoves(this.otherTile) as Array).length > 0){
+					if ((map.getAllValidMoves(map.board, this.otherTile) as Array).length > 0){
 						trace('bot move again');
 						botMove();
 						return;
