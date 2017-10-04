@@ -84,7 +84,7 @@ package engine
 		public function getBoardWithValidMoves(_board:Array, playerTile:String):Array{
 			var boardHints:Array = new Array();
 			
-			boardHints = copyBoard(board);
+			boardHints = copyBoard(_board);
 			var allValidMoves:Array = new Array();
 			//available moves
 			allValidMoves = getAllValidMoves(_board, playerTile);
@@ -196,7 +196,7 @@ package engine
 		private function copyBoard(_board:Array):Array {
 			var a:Array = new Array();
 			for (var n:uint = 0; n < _board.length; n++) {
-				a[n] = board[n].concat();
+				a[n] = _board[n].concat();
 			}
 			return a;
 		}
