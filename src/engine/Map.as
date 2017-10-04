@@ -10,6 +10,33 @@ package engine
 			//init();
 		}
 		
+		public function getBestMove(_board:Array, playerTile:String, botTile:String):Array{
+			
+			var boardCopy:Array = new Array();
+			var availableMoves:Array = new Array();	
+			
+			boardCopy = this.copyBoard(_board);
+			availableMoves = this.getAllValidMoves(boardCopy, botTile);
+			
+			var bestMove:Array = new Array();
+			var bestScore:uint = 0;
+			
+			for (var n:uint = 0; n < availableMoves.length; n++) { 
+				
+				this.makeMove(boardCopy, botTile, availableMoves[n].x, availableMoves[n].y);
+				var score:uint = this.getScore(_board, playerTile, botTile, false)[1]; 
+				
+				if (score > bestScore){
+					bestScore = score;
+					bestMove = [availableMoves[n].x, availableMoves[n].y];
+				}
+
+			}
+			
+			return bestMove;
+			
+		}
+		
 		//get user's and computes's scores
 		public function getScore(_board:Array, playerTile:String, otherTile:String, forLabel:Boolean):Array{
 			var scorePlayer:uint = 0;

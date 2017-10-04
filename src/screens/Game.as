@@ -103,12 +103,11 @@ package screens
 		
 		//computer move 
 		private function botMove():void{
-			var availableMoves:Array = new Array();	
-			availableMoves = map.getAllValidMoves(map.board, this.otherTile);
 			
-			if (availableMoves.length > 0){ 
-				var move:uint = Math.floor( Math.random() * (availableMoves.length - 1) ); //primitive bot -  choose random move
-				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, availableMoves[move].x, availableMoves[move].y);
+			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.otherTile);
+			
+			if (bestMove){ 
+				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, bestMove[0], bestMove[1]);
 				
 				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); // get baord with hints and redraw view
 				boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0]; //show scores
