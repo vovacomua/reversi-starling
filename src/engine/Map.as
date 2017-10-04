@@ -11,7 +11,7 @@ package engine
 		}
 		
 		//get user's and computes's scores
-		public function getScore(playerTile:String, otherTile:String, forLabel:Boolean):Array{
+		public function getScore(_board:Array, playerTile:String, otherTile:String, forLabel:Boolean):Array{
 			var scorePlayer:uint = 0;
 			var scoreBot:uint = 0;
 			var s:String;
@@ -20,10 +20,10 @@ package engine
 			{
 				for (var j:uint = 0; j <= 7; ++j)
 				{
-					if (board[i][j] == playerTile){
+					if (_board[i][j] == playerTile){
 						scorePlayer += 1;
 					}
-					if (board[i][j] == otherTile){
+					if (_board[i][j] == otherTile){
 						scoreBot += 1;
 					}
 				}

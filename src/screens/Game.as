@@ -90,7 +90,7 @@ package screens
 					if ((map.getAllValidMoves(this.playerTile) as Array).length > 0){ 
 						trace('plr move again');
 						boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile)); 
-						boardView.scores.text = map.getScore(this.playerTile, this.otherTile, true)[0];
+						boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
 						return;
 					} else{
 						//_finish
@@ -111,7 +111,7 @@ package screens
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, availableMoves[move].x, availableMoves[move].y);
 				
 				boardView.drawTiles(map.getBoardWithValidMoves(this.playerTile)); // get baord with hints and redraw view
-				boardView.scores.text = map.getScore(this.playerTile, this.otherTile, true)[0]; //show scores
+				boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0]; //show scores
 				
 				if (nextMoveAvailable){
 					//trace('you move');	
@@ -130,7 +130,7 @@ package screens
 		}
 		
 		private function finish():void{		
-			if (map.getScore(this.playerTile, this.otherTile, false)[0] >= map.getScore(this.playerTile, this.otherTile, false)[1]){
+			if (map.getScore(map.board, this.playerTile, this.otherTile, false)[0] >= map.getScore(map.board, this.playerTile, this.otherTile, false)[1]){
 				Map.winner = "You Won! Replay?";
 			} else {
 				Map.winner = "You Lose. Replay?";
