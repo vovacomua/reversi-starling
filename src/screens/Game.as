@@ -89,8 +89,7 @@ package screens
 				} else{ //as computed can't move - can user move again?
 					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
 						trace('plr move again');
-						boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
-						boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
+						updateView();
 						return;
 					} else{
 						//_finish
@@ -109,8 +108,7 @@ package screens
 			if (bestMove){ 
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, bestMove[0], bestMove[1]);
 				
-				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); // get baord with hints and redraw view
-				boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0]; //show scores
+				updateView();
 				
 				if (nextMoveAvailable){
 					//trace('you move');	
@@ -126,6 +124,13 @@ package screens
 					}
 				}
 			}
+		}
+		
+		private function updateView():void{
+			
+			boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
+			boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
+			
 		}
 		
 		private function finish():void{		
