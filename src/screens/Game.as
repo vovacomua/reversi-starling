@@ -20,10 +20,11 @@ package screens
 		
 		private var playerTile:String;
 		private var botTile:String;
-		private var currentTile:String = null;
+		//private var currentTile:String = null;
 		private var _currentTile:String = null;
 		private var otherTile:String;
 		private var nextMove:Function;
+		private var repeatMove:Function;
 		
 		private var map:Map = new Map();
 		
@@ -111,15 +112,18 @@ package screens
 			}
 		}
 		
-		public function get currentTile2():String { return _currentTile; }
-		public function set currentTile2(_val:String):void
+		public function get currentTile():String { return _currentTile; }
+		public function set currentTile(_val:String):void
 		{
+			_currentTile = _val;
 			if (_val == "X"){otherTile = "O";} else{otherTile = "X";}
 			
 			if (_val == playerTile){
 				nextMove = botMove;
+				repeatMove = userMove;
 			} else { //botTile
-				nextMove = function():void{trace('BOT action');};
+				nextMove = userMove;
+				repeatMove = botMove;
 			}
 		}
 		
@@ -133,14 +137,14 @@ package screens
 		private function onUpdateViewComplete(e:Event):void {
 			trace("UPD view complete");
 			
-			if (currentTile == playerTile){
+			if (currentTile){
 				
-				if ((map.getAllValidMoves(map.board, this.botTile) as Array).length > 0){
-					botMove();	
+				if ((map.getAllValidMoves(map.board, this.otherTile) as Array).length > 0){
+					nextMove();	
 					return;
 				} else{ 
-					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
-						//userMove();
+					if ((map.getAllValidMoves(map.board, this.currentTile) as Array).length > 0){ 
+						repeatMove();
 						return;
 					} else{
 						//_finish
@@ -148,24 +152,10 @@ package screens
 						finish();
 					}	
 				}
-			}
-			
-			if (currentTile == botTile){
 				
-				if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){
-					userMove();	
-					return;
-				} else{ 
-					if ((map.getAllValidMoves(map.board, this.botTile) as Array).length > 0){ 
-						botMove();
-						return;
-					} else{
-						//_finish
-						trace('finish');
-						finish();
-					}	
-				}
-
+			} else {
+				
+				currentTile = playerTile;
 			}
 			
 		}
