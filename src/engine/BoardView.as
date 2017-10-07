@@ -170,8 +170,13 @@ package engine
 				}
 			}
 			//onComplete 
-			
+			Starling.juggler.delayCall(complete, 1.0);
+
+		}
+		
+		private function complete():void{
 			dispatchEvent(new Event(Event.COMPLETE)); //OK!
 		}
+		
 	}
 }
