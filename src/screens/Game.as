@@ -20,6 +20,8 @@ package screens
 		
 		private var playerTile:String;
 		private var botTile:String;
+		private var currentTile:String = null;
+		private var otherTile:String;
 		
 		private var map:Map = new Map();
 		
@@ -83,23 +85,11 @@ package screens
 		private function userMove(x:uint, y:uint):void
 		{
 			if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
+				currentTile = playerTile;
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
 				//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
 				updateView();
 				
-				if (nextMoveAvailable){
-					this.botMove();	//computer move
-				} else{ //as computed can't move - can user move again?
-					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
-						trace('plr move again');
-						updateView();
-						return;
-					} else{
-						//_finish
-						trace('finish');
-						finish();
-					}	
-				}
 			}
 		}
 		
@@ -109,6 +99,7 @@ package screens
 			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.botTile);
 			
 			if (bestMove){ 
+				currentTile = botTile;
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.botTile, bestMove[0], bestMove[1]);
 				
 				updateView();
@@ -138,6 +129,23 @@ package screens
 		
 		private function onUpdateViewComplete(e:Event):void {
 			trace("UPD view complete");
+			
+			if (currentTile == playerTile){
+				
+				if ((map.getAllValidMoves(map.board, this.botTile) as Array).length > 0){
+					this.botMove();	//computer move
+				} else{ //as computed can't move - can user move again?
+					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
+						trace('plr move again');
+						updateView();
+						return;
+					} else{
+						//_finish
+						trace('finish');
+						finish();
+					}	
+				}
+			}
 		}
 		
 		private function finish():void{		
