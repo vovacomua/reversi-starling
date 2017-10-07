@@ -55,8 +55,10 @@ package screens
 			map.init(); //new clear board array
 			
 			boardView.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
-			boardView.drawTiles(map.getBoardWithValidMoves(map.board, playerTile)); //show tiles
+			//boardView.drawTiles(map.getBoardWithValidMoves(map.board, playerTile)); //show tiles
+			updateView();
 		}
+		
 		
 		private function onTouch(event:TouchEvent):void
 		{
@@ -82,7 +84,8 @@ package screens
 		{
 			if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
-				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
+				//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
+				updateView();
 				
 				if (nextMoveAvailable){
 					this.botMove();	//computer move
