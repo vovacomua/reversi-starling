@@ -19,7 +19,7 @@ package screens
 		private var boardView:BoardView;
 		
 		private var playerTile:String;
-		private var otherTile:String;
+		private var botTile:String;
 		
 		private var map:Map = new Map();
 		
@@ -50,12 +50,12 @@ package screens
 		private function initGame(player:String = null, other:String = null):void{	
 		
 			playerTile = player;
-			otherTile = other;
+			botTile = other;
 			
 			map.init(); //new clear board array
 			
 			boardView.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
-			//boardView.drawTiles(map.getBoardWithValidMoves(map.board, playerTile)); //show tiles
+			boardView.addEventListener(Event.COMPLETE, onUpdateViewComplete);
 			updateView();
 		}
 		
@@ -106,17 +106,17 @@ package screens
 		//computer move 
 		private function botMove():void{
 			
-			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.otherTile);
+			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.botTile);
 			
 			if (bestMove){ 
-				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, bestMove[0], bestMove[1]);
+				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.botTile, bestMove[0], bestMove[1]);
 				
 				updateView();
 				
 				if (nextMoveAvailable){
 					//trace('you move');	
 				} else{ //as user can't move - can computer move again?
-					if ((map.getAllValidMoves(map.board, this.otherTile) as Array).length > 0){
+					if ((map.getAllValidMoves(map.board, this.botTile) as Array).length > 0){
 						trace('bot move again');
 						botMove();
 						return;
@@ -132,12 +132,16 @@ package screens
 		private function updateView():void{
 			
 			boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
-			boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
+			boardView.scores.text = map.getScore(map.board, this.playerTile, this.botTile, true)[0];
 			
 		}
 		
+		private function onUpdateViewComplete(e:Event):void {
+			trace("UPD view complete");
+		}
+		
 		private function finish():void{		
-			if (map.getScore(map.board, this.playerTile, this.otherTile, false)[0] >= map.getScore(map.board, this.playerTile, this.otherTile, false)[1]){
+			if (map.getScore(map.board, this.playerTile, this.botTile, false)[0] >= map.getScore(map.board, this.playerTile, this.botTile, false)[1]){
 				Map.winner = "You Won! Replay?";
 			} else {
 				Map.winner = "You Lose. Replay?";

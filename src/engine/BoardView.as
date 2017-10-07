@@ -23,6 +23,8 @@ package engine
 	
 	import utils.CustomButton;
 	
+	import starling.events.EventDispatcher;
+	
 	public class BoardView extends Sprite
 	{
 		[Embed( source = "../assets/board.png" )]
@@ -167,6 +169,9 @@ package engine
 					}
 				}
 			}
+			//onComplete 
+			
+			dispatchEvent(new Event(Event.COMPLETE)); //OK!
 		}
 	}
 }
