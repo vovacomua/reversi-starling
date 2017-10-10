@@ -2,6 +2,8 @@ package engine.tileStates
 {
 	import engine.FrameSprite;
 	
+	import starling.core.Starling;
+	
 	public class StateContext
 	{
 		
@@ -28,20 +30,24 @@ package engine.tileStates
 		
 		//
 		
-		public function setEmpty():void{
-			state.setEmply(player);
+		public function setEmpty(delay:Number):void{
+			//state.setEmply(player);
+			Starling.juggler.delayCall(state.setEmply, delay, player);
 		}
 		
-		public function setHint():void{
-			state.setHint(player);
+		public function setHint(delay:Number):void{
+			//state.setHint(player);
+			Starling.juggler.delayCall(state.setHint, delay, player);
 		}
 		
-		public function setBlack():void{
-			state.setBlack(player);
+		public function setBlack(delay:Number):void{
+			//state.setBlack(player);
+			Starling.juggler.delayCall(state.setBlack, delay, player);
 		}
 		
-		public function setWhite():void{
-			state.setWhite(player);
+		public function setWhite(delay:Number):void{
+			//state.setWhite(player);
+			Starling.juggler.delayCall(state.setWhite, delay, player);
 		}
 		
 		//set new current state

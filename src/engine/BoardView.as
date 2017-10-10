@@ -14,6 +14,7 @@ package engine
 	import starling.display.MovieClip;
 	import starling.display.Sprite;
 	import starling.events.Event;
+	import starling.events.EventDispatcher;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
@@ -22,8 +23,6 @@ package engine
 	import starling.textures.Texture;
 	
 	import utils.CustomButton;
-	
-	import starling.events.EventDispatcher;
 	
 	public class BoardView extends Sprite
 	{
@@ -49,6 +48,7 @@ package engine
 		public var boardSize:uint = 320;
 		private var stoneSize:int = boardSize / pieces;
 		
+		private var maxDelay:Number = 0;
 		
 		public function BoardView()
 		{
@@ -142,7 +142,7 @@ package engine
 			
 		}
 		
-		public function drawTiles (map:Array):void
+		public function drawTiles (map:Array, move:Array):void
 		{	
 			for (var i:uint = 0; i <= 7; ++i)
 			{
@@ -152,26 +152,43 @@ package engine
 						case "X":
 							//drawStone(0x000000, i, j, stoneSize/2 - 4);
 							//tiles2.getTile(i, j).setBW("B"); //setBlack
-							tiles.getTile(i, j).stateContext.setBlack();
+							tiles.getTile(i, j).stateContext.setBlack(delay(i, j, move));
 							break;
 						
 						case "O":
-							tiles.getTile(i, j).stateContext.setWhite();
+							tiles.getTile(i, j).stateContext.setWhite(delay(i, j, move));
 							break;
 						
 						case "h":
-							tiles.getTile(i, j).stateContext.setHint();
+							tiles.getTile(i, j).stateContext.setHint(delay(i, j, move));
 							break;
 						
 						case " ":
-							tiles.getTile(i, j).stateContext.setEmpty();
+							tiles.getTile(i, j).stateContext.setEmpty(delay(i, j, move));
 							break;						
 					}
 				}
 			}
 			//onComplete 
-			Starling.juggler.delayCall(complete, 1.0);
+			Starling.juggler.delayCall(complete, maxDelay);
+			maxDelay = 0;
 
+		}
+		
+		private function delay(i:uint, j:uint, move:Array):Number {
+			if (! move) return 0;
+			
+			var _delay:Number = Math.abs(i - move[0]) + Math.abs(j - move[1]);
+			
+			if (!(i == move[0] || j == move[1])){
+				_delay /= 2;
+			}
+			
+			_delay *= 0.2;
+			
+			if (_delay > maxDelay) maxDelay = _delay;
+				
+			return _delay;
 		}
 		
 		private function complete():void{

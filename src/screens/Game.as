@@ -93,7 +93,7 @@ package screens
 				currentTile = playerTile;
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
 				//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
-				updateView();
+				updateView([x, y]);
 				
 			}
 		}
@@ -107,7 +107,7 @@ package screens
 				currentTile = botTile;
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.botTile, bestMove[0], bestMove[1]);
 				
-				updateView();
+				updateView(bestMove);
 				
 			}
 		}
@@ -127,9 +127,9 @@ package screens
 			}
 		}
 		
-		private function updateView():void{
+		private function updateView(move:Array = null):void{
 			
-			boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
+			boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile), move); 
 			boardView.scores.text = map.getScore(map.board, this.playerTile, this.botTile, true)[0];
 			
 		}

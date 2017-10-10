@@ -87,7 +87,7 @@ package engine
 			pushToFrameSprite("flip2W", 7);
 			
 			stateContext = new StateContext(player);
-			stateContext.setEmpty();
+			stateContext.setEmpty(0);
 		}
 		
 		private function pushToFrameSprite(frameName:String, pos:int):void{
