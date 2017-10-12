@@ -12,19 +12,17 @@ package engine
 		
 		public function getBestMove(_board:Array, playerTile:String, botTile:String):Array{
 			
-			var boardCopy:Array = new Array();
-			var availableMoves:Array = new Array();	
-			
-			boardCopy = this.copyBoard(_board);
-			availableMoves = this.getAllValidMoves(boardCopy, botTile);
+			var availableMoves:Array = this.getAllValidMoves(this.copyBoard(_board), botTile);
 			
 			var bestMove:Array = new Array();
 			var bestScore:uint = 0;
 			
 			for (var n:uint = 0; n < availableMoves.length; n++) { 
 				
+				var boardCopy:Array = this.copyBoard(_board);
+				
 				this.makeMove(boardCopy, botTile, availableMoves[n].x, availableMoves[n].y);
-				var score:uint = this.getScore(_board, playerTile, botTile, false)[1]; 
+				var score:uint = this.getScore(boardCopy, playerTile, botTile, false)[1]; 
 				
 				if (score > bestScore){
 					bestScore = score;
@@ -78,7 +76,7 @@ package engine
 		
 		//make move, flip captured stones and check if opponent's next move is available
 		public function makeMove(_board:Array, tile:String, x:uint, y:uint):Boolean{
-			trace("makeMove", tile, x, y);
+			//trace("makeMove", tile, x, y);
 			var botTile:String;
 			
 			//flip all

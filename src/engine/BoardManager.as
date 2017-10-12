@@ -181,7 +181,7 @@ package engine
 			var _delay:Number = Math.abs(i - move[0]) + Math.abs(j - move[1]);
 			
 			if (!(i == move[0] || j == move[1])){
-				_delay /= 2;
+				_delay = (_delay / 2) - .5;
 			}
 			
 			_delay *= 0.2;

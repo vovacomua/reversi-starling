@@ -96,7 +96,7 @@ package screens
 					allowUserMove = false;
 					currentTile = playerTile;
 					var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
-					//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
+
 					updateView([x, y]);
 					
 				}
@@ -111,7 +111,7 @@ package screens
 			if (bestMove){ 
 				currentTile = botTile;
 				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.botTile, bestMove[0], bestMove[1]);
-				
+				trace('Bot move ', bestMove[0], ':',  bestMove[1]);
 				updateView(bestMove);
 				
 			}
@@ -140,7 +140,7 @@ package screens
 		}
 		
 		private function onUpdateViewComplete(e:Event):void {
-			trace("UPD view complete");
+			//trace("UPD view complete");
 			
 			if (currentTile){
 				
