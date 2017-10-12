@@ -16,7 +16,7 @@ package screens
 	public class Game extends AScreen
 	{
 		private var button:CustomButton;
-		private var boardView:BoardView;
+		private var boardManager:BoardManager;
 		
 		private var playerTile:String;
 		private var botTile:String;
@@ -45,13 +45,13 @@ package screens
 		}
 		
 		private function showButtons():void{
-			if (boardView == null){ //init view
-				boardView = new BoardView();
-				this.addChild(boardView);
-				boardView.board.addEventListener(TouchEvent.TOUCH, onTouch);
+			if (boardManager == null){ //init view
+				boardManager = new BoardManager();
+				this.addChild(boardManager);
+				boardManager.board.addEventListener(TouchEvent.TOUCH, onTouch);
 				
 			}
-			boardView.switchView(ScreenState.GAME_SHOW_BUTTONS); // show buttons 
+			boardManager.switchView(ScreenState.GAME_SHOW_BUTTONS); // show buttons 
 		}
 		
 		private function initGame(player:String = null, other:String = null):void{	
@@ -61,8 +61,8 @@ package screens
 			
 			map.init(); //new clear board array
 			
-			boardView.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
-			boardView.addEventListener(Event.COMPLETE, onUpdateViewComplete);
+			boardManager.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
+			boardManager.addEventListener(Event.COMPLETE, onUpdateViewComplete);
 			updateView();
 		}
 		
@@ -75,9 +75,9 @@ package screens
 				var localPos:Point = touch.getLocation(this);
 				trace("Touched object at position: " + localPos);
 				
-				var scaleFactor:uint = this.boardView.boardSize / 8; //get clicked tile coordinates
-				var x:uint = (localPos.x - boardView.boardOffset) / scaleFactor;
-				var y:uint = (localPos.y - boardView.boardOffset) / scaleFactor;
+				var scaleFactor:uint = this.boardManager.boardSize / 8; //get clicked tile coordinates
+				var x:uint = (localPos.x - boardManager.boardOffset) / scaleFactor;
+				var y:uint = (localPos.y - boardManager.boardOffset) / scaleFactor;
 				
 				trace(x, ' ', y);
 				
@@ -134,8 +134,8 @@ package screens
 		
 		private function updateView(move:Array = null):void{
 			
-			boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile), move); 
-			boardView.scores.text = map.getScore(map.board, this.playerTile, this.botTile, true)[0];
+			boardManager.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile), move); 
+			boardManager.scores.text = map.getScore(map.board, this.playerTile, this.botTile, true)[0];
 			
 		}
 		
@@ -188,11 +188,11 @@ package screens
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, ScreenState.FINISH, true));
 					break;
 				
-				case boardView.buttonWhite:
+				case boardManager.buttonWhite:
 					initGame("O", "X");
 					break;
 				
-				case boardView.buttonBlack:	
+				case boardManager.buttonBlack:	
 					initGame("X", "O");
 					break;
 				
