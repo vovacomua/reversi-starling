@@ -26,6 +26,8 @@ package screens
 		private var nextMove:Function;
 		private var repeatMove:Function;
 		
+		private var allowUserMove:Boolean = false;
+		
 		private var map:Map = new Map();
 		
 		public function Game(param:String = null)
@@ -87,14 +89,17 @@ package screens
 		
 		private function userMove(x:int = -1, y:int = -1):void
 		{
-			if (x < 0) {trace('userMove'); return;};
+			if (x < 0) {allowUserMove = true; return;};
 			
-			if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
-				currentTile = playerTile;
-				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
-				//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
-				updateView([x, y]);
-				
+			if (allowUserMove){
+				if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
+					allowUserMove = false;
+					currentTile = playerTile;
+					var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
+					//boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
+					updateView([x, y]);
+					
+				}
 			}
 		}
 		
@@ -154,8 +159,8 @@ package screens
 				}
 				
 			} else {
-				
 				currentTile = playerTile;
+				allowUserMove = true;
 			}
 			
 		}
