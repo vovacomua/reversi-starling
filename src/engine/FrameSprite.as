@@ -103,13 +103,9 @@ package engine
 			
 			currentFrame = frameNum; 
 			
-			for (var i:int = 0; i<currentFrameSprite.numChildren; i++)
-			{
-				//trace(frameNum, 'w:', MovieClip(currentFrameSprite.getChildAt(i)).width, ' , x:', MovieClip(currentFrameSprite.getChildAt(i)).x);
-				var mc:MovieClip = MovieClip(currentFrameSprite.getChildAt(i));
-				mc.currentFrame = 0;
-				mc.play();
-			}
+			var mc:MovieClip = MovieClip(currentFrameSprite.getChildAt(0));
+			mc.currentFrame = 0;
+			mc.play();
 		}
 		
 		public function play():void
