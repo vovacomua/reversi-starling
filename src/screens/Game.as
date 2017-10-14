@@ -16,10 +16,17 @@ package screens
 	public class Game extends AScreen
 	{
 		private var button:CustomButton;
-		private var boardView:BoardView;
+		private var boardManager:BoardManager;
 		
 		private var playerTile:String;
+		private var botTile:String;
+		//private var currentTile:String = null;
+		private var _currentTile:String = null;
 		private var otherTile:String;
+		private var nextMove:Function;
+		private var repeatMove:Function;
+		
+		private var allowUserMove:Boolean = false;
 		
 		private var map:Map = new Map();
 		
@@ -38,25 +45,27 @@ package screens
 		}
 		
 		private function showButtons():void{
-			if (boardView == null){ //init view
-				boardView = new BoardView();
-				this.addChild(boardView);
-				boardView.board.addEventListener(TouchEvent.TOUCH, onTouch);
+			if (boardManager == null){ //init view
+				boardManager = new BoardManager();
+				this.addChild(boardManager);
+				boardManager.board.addEventListener(TouchEvent.TOUCH, onTouch);
 				
 			}
-			boardView.switchView(ScreenState.GAME_SHOW_BUTTONS); // show buttons 
+			boardManager.switchView(ScreenState.GAME_SHOW_BUTTONS); // show buttons 
 		}
 		
 		private function initGame(player:String = null, other:String = null):void{	
 		
 			playerTile = player;
-			otherTile = other;
+			botTile = other;
 			
 			map.init(); //new clear board array
 			
-			boardView.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
-			boardView.drawTiles(map.getBoardWithValidMoves(map.board, playerTile)); //show tiles
+			boardManager.switchView(ScreenState.GAME_INIT_GAME); //show game board and scores
+			boardManager.addEventListener(Event.COMPLETE, onUpdateViewComplete);
+			updateView();
 		}
+		
 		
 		private function onTouch(event:TouchEvent):void
 		{
@@ -66,9 +75,9 @@ package screens
 				var localPos:Point = touch.getLocation(this);
 				trace("Touched object at position: " + localPos);
 				
-				var scaleFactor:uint = this.boardView.boardSize / 8; //get clicked tile coordinates
-				var x:uint = (localPos.x - boardView.boardOffset) / scaleFactor;
-				var y:uint = (localPos.y - boardView.boardOffset) / scaleFactor;
+				var scaleFactor:uint = this.boardManager.boardSize / 8; //get clicked tile coordinates
+				var x:uint = (localPos.x - boardManager.boardOffset) / scaleFactor;
+				var y:uint = (localPos.y - boardManager.boardOffset) / scaleFactor;
 				
 				trace(x, ' ', y);
 				
@@ -78,25 +87,18 @@ package screens
 		}
 		
 		
-		private function userMove(x:uint, y:uint):void
+		private function userMove(x:int = -1, y:int = -1):void
 		{
-			if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
-				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
-				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile));
-				
-				if (nextMoveAvailable){
-					this.botMove();	//computer move
-				} else{ //as computed can't move - can user move again?
-					if ((map.getAllValidMoves(map.board, this.playerTile) as Array).length > 0){ 
-						trace('plr move again');
-						boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); 
-						boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0];
-						return;
-					} else{
-						//_finish
-						trace('finish');
-						finish();
-					}	
+			if (x < 0) {allowUserMove = true; return;};
+			
+			if (allowUserMove){
+				if (map.isAvailableMove(map.board, this.playerTile, x, y)){ // is this tile available
+					allowUserMove = false;
+					currentTile = playerTile;
+					var nextMoveAvailable:Boolean = map.makeMove(map.board, this.playerTile, x, y); //make move and get computer can make next move
+
+					updateView([x, y]);
+					
 				}
 			}
 		}
@@ -104,32 +106,67 @@ package screens
 		//computer move 
 		private function botMove():void{
 			
-			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.otherTile);
+			var bestMove:Array = map.getBestMove(map.board, this.playerTile, this.botTile);
 			
 			if (bestMove){ 
-				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.otherTile, bestMove[0], bestMove[1]);
+				currentTile = botTile;
+				var nextMoveAvailable:Boolean = map.makeMove(map.board, this.botTile, bestMove[0], bestMove[1]);
+				trace('Bot move ', bestMove[0], ':',  bestMove[1]);
+				updateView(bestMove);
 				
-				boardView.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile)); // get baord with hints and redraw view
-				boardView.scores.text = map.getScore(map.board, this.playerTile, this.otherTile, true)[0]; //show scores
-				
-				if (nextMoveAvailable){
-					//trace('you move');	
-				} else{ //as user can't move - can computer move again?
-					if ((map.getAllValidMoves(map.board, this.otherTile) as Array).length > 0){
-						trace('bot move again');
-						botMove();
-						return;
-					}else{
-						//_finish
-						trace('finish');
-						finish();	
-					}
-				}
 			}
 		}
 		
+		public function get currentTile():String { return _currentTile; }
+		public function set currentTile(_val:String):void
+		{
+			_currentTile = _val;
+			if (_val == "X"){otherTile = "O";} else{otherTile = "X";}
+			
+			if (_val == playerTile){
+				nextMove = botMove;
+				repeatMove = userMove;
+			} else { //botTile
+				nextMove = userMove;
+				repeatMove = botMove;
+			}
+		}
+		
+		private function updateView(move:Array = null):void{
+			
+			boardManager.drawTiles(map.getBoardWithValidMoves(map.board, this.playerTile), move); 
+			boardManager.scores.text = map.getScore(map.board, this.playerTile, this.botTile, true)[0];
+			
+		}
+		
+		private function onUpdateViewComplete(e:Event):void {
+			//trace("UPD view complete");
+			
+			if (currentTile){
+				
+				if ((map.getAllValidMoves(map.board, this.otherTile) as Array).length > 0){
+					nextMove();	
+					return;
+				} else{ 
+					if ((map.getAllValidMoves(map.board, this.currentTile) as Array).length > 0){ 
+						repeatMove();
+						return;
+					} else{
+						//_finish
+						trace('finish');
+						finish();
+					}	
+				}
+				
+			} else {
+				currentTile = playerTile;
+				allowUserMove = true;
+			}
+			
+		}
+		
 		private function finish():void{		
-			if (map.getScore(map.board, this.playerTile, this.otherTile, false)[0] >= map.getScore(map.board, this.playerTile, this.otherTile, false)[1]){
+			if (map.getScore(map.board, this.playerTile, this.botTile, false)[0] >= map.getScore(map.board, this.playerTile, this.botTile, false)[1]){
 				Map.winner = "You Won! Replay?";
 			} else {
 				Map.winner = "You Lose. Replay?";
@@ -151,11 +188,11 @@ package screens
 					this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, ScreenState.FINISH, true));
 					break;
 				
-				case boardView.buttonWhite:
+				case boardManager.buttonWhite:
 					initGame("O", "X");
 					break;
 				
-				case boardView.buttonBlack:	
+				case boardManager.buttonBlack:	
 					initGame("X", "O");
 					break;
 				

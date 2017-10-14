@@ -23,36 +23,18 @@ package engine
 	
 	
 	public class Tile extends Sprite
-	{
-		//[Embed( source = "/assets/Marble.png" )]
-		//private var MarbleBMP		:Class;
-		
+	{	
 		// Embed the Atlas XML
 		[Embed(source="../assets/tiles.xml", mimeType="application/octet-stream")]
-		public static const AtlasXml2:Class;
+		public static const AtlasXml:Class;
 		
 		// Embed the Atlas Texture:
 		[Embed(source="../assets/tiles.png")]
-		public static const AtlasTexture2:Class;
+		public static const AtlasTexture:Class;
 		
 		private var atlas:TextureAtlas;
 		
-		//private var btn:Button;
-		//private var btn2:Button;
-		private var img:Image;
-		
-		//private var marbleBMP		:Bitmap;
-		//private var marbleTexture	:Texture;
-		
-		private var mMovie:MovieClip;
 		private var player:FrameSprite;
-		private var player_blue:MovieClip;
-		private var player_red:MovieClip;
-		
-		private var movie:MovieClip;
-		
-		private var currentTile:String = 'empty';
-		
 		public var stateContext:StateContext;
 		
 		public function Tile()
@@ -67,8 +49,8 @@ package engine
 			//this.addEventListener(Event.TRIGGERED, onClick);
 			
 			// create atlas
-			var texture:Texture = Texture.fromEmbeddedAsset(AtlasTexture2);
-			var xml:XML = XML(new AtlasXml2());
+			var texture:Texture = Texture.fromEmbeddedAsset(AtlasTexture);
+			var xml:XML = XML(new AtlasXml());
 			atlas = new TextureAtlas(texture, xml);
 			
 			player = new FrameSprite(40);
@@ -87,7 +69,7 @@ package engine
 			pushToFrameSprite("flip2W", 7);
 			
 			stateContext = new StateContext(player);
-			stateContext.setEmpty();
+			stateContext.setEmpty(0);
 		}
 		
 		private function pushToFrameSprite(frameName:String, pos:int):void{
@@ -99,39 +81,6 @@ package engine
 			player.addFrame(frameName);
 			player.addChildToFrame(mc, pos);	
 			
-		}
-		
-		public function setEmpty():void{
-			switch(this.currentTile){
-				case 'empty':
-					//player.gotoAndStop('setEmpty');
-					break;
-				
-				case 'hint':
-					player.gotoAndStop('Hint2Empty');
-					break;
-			}
-			this.currentTile = 'empty';
-		}
-		
-		public function setHint():void{
-			switch(this.currentTile){
-				case 'empty':
-					player.gotoAndStop('Empty2Hint');
-					break;
-			}
-			this.currentTile = 'hint';
-		}
-		
-		public function setBW(BW:String):void{
-			if (this.currentTile == 'empty' || this.currentTile == 'hint'){
-				player.gotoAndStop('set'+BW);
-			} else if (this.currentTile != BW){
-				player.gotoAndStop('flip2'+BW);
-			}
-			
-			this.currentTile = BW;
-		}
-		
+		}	
 	}
 }

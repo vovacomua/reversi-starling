@@ -12,19 +12,17 @@ package engine
 		
 		public function getBestMove(_board:Array, playerTile:String, botTile:String):Array{
 			
-			var boardCopy:Array = new Array();
-			var availableMoves:Array = new Array();	
-			
-			boardCopy = this.copyBoard(_board);
-			availableMoves = this.getAllValidMoves(boardCopy, botTile);
+			var availableMoves:Array = this.getAllValidMoves(this.copyBoard(_board), botTile);
 			
 			var bestMove:Array = new Array();
 			var bestScore:uint = 0;
 			
 			for (var n:uint = 0; n < availableMoves.length; n++) { 
 				
+				var boardCopy:Array = this.copyBoard(_board);
+				
 				this.makeMove(boardCopy, botTile, availableMoves[n].x, availableMoves[n].y);
-				var score:uint = this.getScore(_board, playerTile, botTile, false)[1]; 
+				var score:uint = this.getScore(boardCopy, playerTile, botTile, false)[1]; 
 				
 				if (score > bestScore){
 					bestScore = score;
@@ -38,7 +36,7 @@ package engine
 		}
 		
 		//get user's and computes's scores
-		public function getScore(_board:Array, playerTile:String, otherTile:String, forLabel:Boolean):Array{
+		public function getScore(_board:Array, playerTile:String, botTile:String, forLabel:Boolean):Array{
 			var scorePlayer:uint = 0;
 			var scoreBot:uint = 0;
 			var s:String;
@@ -50,7 +48,7 @@ package engine
 					if (_board[i][j] == playerTile){
 						scorePlayer += 1;
 					}
-					if (_board[i][j] == otherTile){
+					if (_board[i][j] == botTile){
 						scoreBot += 1;
 					}
 				}
@@ -78,8 +76,8 @@ package engine
 		
 		//make move, flip captured stones and check if opponent's next move is available
 		public function makeMove(_board:Array, tile:String, x:uint, y:uint):Boolean{
-			trace("makeMove", tile, x, y);
-			var otherTile:String;
+			//trace("makeMove", tile, x, y);
+			var botTile:String;
 			
 			//flip all
 			var tilesToFlip:Array = new Array();
@@ -96,9 +94,9 @@ package engine
 			_board[x][y] = tile;
 			
 			//check opponents next move
-			if (tile == "X"){otherTile = "O";} else{otherTile = "X";}
+			if (tile == "X"){botTile = "O";} else{botTile = "X";}
 			
-			if ((getAllValidMoves(_board, otherTile) as Array).length > 0){
+			if ((getAllValidMoves(_board, botTile) as Array).length > 0){
 				return true;
 			} else {
 				return false;
@@ -144,7 +142,7 @@ package engine
 		public function isValidMove(_board:Array, tile:String, xstart:int, ystart:int):Array{
 			var tilesToFlip:Array = new Array();
 			
-			var otherTile:String; 
+			var botTile:String; 
 			var traversalDir:Array = [[0,1], [1,1], [1,0], [1,-1], [0,-1], [-1,-1], [-1,0], [-1,1]];
 			var x:int; var y:int;
 			
@@ -154,7 +152,7 @@ package engine
 			
 			_board[xstart][ystart] = tile;
 			
-			if (tile == "X"){otherTile = "O";} else{otherTile = "X";}
+			if (tile == "X"){botTile = "O";} else{botTile = "X";}
 			////
 			
 			for each (var dir:Array in traversalDir){
@@ -166,7 +164,7 @@ package engine
 					continue;
 				}
 				
-				if (isOnBoard(x, y) && _board[x][y] == otherTile){ //first proven otherTile
+				if (isOnBoard(x, y) && _board[x][y] == botTile){ //first proven botTile
 					x += dir[0]; 
 					y += dir[1];
 					
@@ -174,7 +172,7 @@ package engine
 						continue;
 					}
 					
-					while (_board[x][y] == otherTile){
+					while (_board[x][y] == botTile){
 						x += dir[0]; 
 						y += dir[1];
 						if (!isOnBoard(x, y)){ // break out WHILE loop, then continue in FOR loop
