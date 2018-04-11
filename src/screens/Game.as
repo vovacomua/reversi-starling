@@ -165,16 +165,18 @@ package screens
 			
 		}
 		
-		private function finish():void{		
+		private function finish():void{	
+			var message:String;
+			
 			if (map.getScore(map.board, this.playerTile, this.botTile, false)[0] >= map.getScore(map.board, this.playerTile, this.botTile, false)[1]){
-				Map.winner = "You Won! Replay?";
+				message = "You Won! Replay?";
 			} else {
-				Map.winner = "You Lose. Replay?";
+				message = "You Lose. Replay?";
 			}
 			
 			showButtons();
-			//this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, ScreenState.FINISH, true, s));
-			this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, ScreenState.FINISH, true));
+			
+			this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, ScreenState.FINISH, true, message));
 		}
 		
 		private function onEventTriggered(event:Event):void

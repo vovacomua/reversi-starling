@@ -3,7 +3,6 @@ package engine
 	public class Map
 	{
 		public var board:Array = new Array();	
-		static public var winner:String = "player";
 		
 		public function Map()
 		{

@@ -1,11 +1,12 @@
 package 
 {
+	import events.NavigationEvent;
+	
 	import flash.display.Bitmap;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	import screens.*;
-	import events.NavigationEvent;
 	
 	import starling.display.Button;
 	import starling.display.Sprite;
@@ -34,14 +35,15 @@ package
 			showScreen(ScreenState.START);
 		}
 		
-		private function showScreen(screen:String):void
+		private function showScreen(screen:String, message:String = null):void
 		{
+			//a bit overly sophisticated way of initializing just to practise the approach 
 			if (currentScreen != null){
 				currentScreen.removeFromParent(true);
 			}
 			
 			var sceneClass:Class = getDefinitionByName("screens."+screen) as Class;
-			currentScreen = new sceneClass("Game Over.Replay?") as AScreen;	
+			currentScreen = new sceneClass(message) as AScreen;	
 		
 			this.addChild(currentScreen);
 		}
@@ -49,7 +51,7 @@ package
 		private function onChangeScreen(event:NavigationEvent):void
 		{
 			trace(event.screen);
-			showScreen(event.screen);
+			showScreen(event.screen, event.scoreResult);
 		}
 	}
 }

@@ -9,7 +9,7 @@ package events
 		public var screen:String;
 		public var scoreResult:String;
 		
-		public function NavigationEvent(type:String, _screen:String, bubbles:Boolean=false, _scoreResult:String=null)
+		public function NavigationEvent(type:String, _screen:String, bubbles:Boolean = false, _scoreResult:String = null)
 		{
 			super(type, bubbles);
 			

@@ -1,11 +1,8 @@
 package screens
 {
 	import events.NavigationEvent;
-	
 	import starling.events.Event;
-	
 	import utils.CustomButton;
-	import engine.Map;
 	
 	public class Finish extends AScreen
 	{
@@ -22,7 +19,7 @@ package screens
 		private function onAddedToStage(event:Event):void {		
 			trace ("Finish initialized");
 			
-			button = new CustomButton(Map.winner);
+			button = new CustomButton(buttonLabel);
 			button.x = 60;
 			button.y = 200;
 			this.addChild(button);
